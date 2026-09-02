@@ -1,7 +1,8 @@
 import { N8nAnalyticsService } from '@/core';
-import { Component, computed, inject, resource } from '@angular/core';
+import { Component, computed, inject, signal } from '@angular/core';
 import { rxResource } from '@angular/core/rxjs-interop';
 import { NgxEchartsDirective } from 'ngx-echarts';
+import type { EChartsOption } from 'echarts';
 
 @Component({
   imports: [NgxEchartsDirective],
@@ -12,21 +13,33 @@ import { NgxEchartsDirective } from 'ngx-echarts';
 export class Dashboard {
   private readonly n8nAnalyticsService = inject(N8nAnalyticsService);
 
+  private readonly prompt = signal<string | undefined>(undefined);
+
   readonly analyticsResource = rxResource({
-    stream: () => this.n8nAnalyticsService.getMockBarChart(),
+    params: () => this.prompt(),
+    stream: ({ params }) => this.n8nAnalyticsService.sendPrompt(params!),
+  });
+
+  readonly isChartResponse = computed(() => {
+    const value = this.analyticsResource.value();
+    return !!value && typeof value === 'object' && 'title' in value;
   });
 
   readonly chartOptions = computed(
-    () => this.analyticsResource.value()?.options ?? {}
+    () => (this.analyticsResource.value() as { options?: EChartsOption })?.options ?? ({} as EChartsOption)
   );
 
   readonly reportTitle = computed(
-    () => this.analyticsResource.value()?.title ?? ''
+    () => (this.analyticsResource.value() as { title?: string })?.title ?? ''
   );
 
-  onSubmit(){
-    //TODO: Implementar método para enviar el prompt al flujo n8n y obtener los datos del reporte
+  readonly textAnswer = computed(() => {
+    const value = this.analyticsResource.value();
+    return typeof value === 'string' ? value : JSON.stringify(value);
+  });
+
+  onSubmit(prompt: string) {
+    if (!prompt.trim()) return;
+    this.prompt.set(prompt.trim());
   }
-
-
 }

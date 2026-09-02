@@ -1,11 +1,12 @@
 <section class="dashboard">
   <div class="dashboard__prompt-container">
-    <form class="dashboard__form">
+    <form class="dashboard__form" (submit)="$event.preventDefault(); onSubmit(promptInput.value)">
       <input
+        #promptInput
         type="text"
         name="prompt"
         placeholder="Escribe tu consulta aquí..."
-        class="dashboard__input" 
+        class="dashboard__input"
       >
 
       <button
@@ -26,14 +27,18 @@
       <p class="dashboard__status-text">Error al comunicarse con el flujo de n8n.</p>
     </div>
   } @else if (analyticsResource.value()) {
-    <h2 class="dashboard__title">{{ reportTitle() }}</h2>
+    @if (isChartResponse()) {
+      <h2 class="dashboard__title">{{ reportTitle() }}</h2>
 
-    <div class="dashboard__chart-card">
-      <div
-        echarts
-        [options]="chartOptions()"
-        class="dashboard__chart-box">
+      <div class="dashboard__chart-card">
+        <div
+          echarts
+          [options]="chartOptions()"
+          class="dashboard__chart-box">
+        </div>
       </div>
-    </div>
+    } @else {
+      <p class="dashboard__raw-response">{{ textAnswer() }}</p>
+    }
   }
 </section>

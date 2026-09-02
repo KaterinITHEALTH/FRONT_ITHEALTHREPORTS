@@ -1,9 +1,17 @@
-import { Service } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
-import { ChartReportResponse } from '../models';
+import { ChartReportResponse, ChatRequest } from '../models';
+import { N8N_WEBHOOK_URL } from '../config/n8n.config';
 
-@Service()
+@Injectable({ providedIn: 'root' })
 export class N8nAnalyticsService {
+  private readonly http = inject(HttpClient);
+
+  sendPrompt(prompt: string): Observable<unknown> {
+    const body: ChatRequest = { prompt };
+    return this.http.post<unknown>(N8N_WEBHOOK_URL, body);
+  }
 
   getMockBarChart(): Observable<ChartReportResponse> {
     const mock: ChartReportResponse = {
