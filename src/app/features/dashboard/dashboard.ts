@@ -20,20 +20,20 @@ export class Dashboard {
     stream: ({ params }) => this.n8nAnalyticsService.sendPrompt(params!),
   });
 
-  readonly isChartResponse = computed(() => {
+  readonly isChartResponse = computed<boolean>(() => {
     const value = this.analyticsResource.value();
     return !!value && typeof value === 'object' && 'title' in value;
   });
 
-  readonly chartOptions = computed(
-    () => (this.analyticsResource.value() as { options?: EChartsOption })?.options ?? ({} as EChartsOption)
+  readonly chartOptions = computed<EChartsOption>(
+    () => (this.analyticsResource.value()?.options ?? {})
   );
 
-  readonly reportTitle = computed(
-    () => (this.analyticsResource.value() as { title?: string })?.title ?? ''
+  readonly reportTitle = computed<string>(
+    () => (this.analyticsResource.value()?.title ?? '')
   );
 
-  readonly textAnswer = computed(() => {
+  readonly textAnswer = computed<string>(() => {
     const value = this.analyticsResource.value();
     return typeof value === 'string' ? value : JSON.stringify(value);
   });

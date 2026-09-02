@@ -7,13 +7,13 @@ import { N8N_WEBHOOK_URL } from '../config/n8n.config';
 @Injectable({ providedIn: 'root' })
 export class N8nAnalyticsService {
   private readonly http = inject(HttpClient);
-
-  sendPrompt(prompt: string): Observable<unknown> {
+  
+  sendPrompt(prompt: string): Observable<ChartReportResponse> {
     const body: ChatRequest = { prompt };
-    return this.http.post<unknown>(N8N_WEBHOOK_URL, body);
+    return this.http.post<ChartReportResponse>(N8N_WEBHOOK_URL, body);
   }
 
-  getMockBarChart(): Observable<ChartReportResponse> {
+  getMockData(): Observable<ChartReportResponse> {
     const mock: ChartReportResponse = {
       id: 'report-001',
       title: 'Disponibilidad de Servicios IT Health',
