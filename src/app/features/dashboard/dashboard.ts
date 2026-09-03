@@ -42,6 +42,18 @@ export class Dashboard {
     return typeof data.isRenderable === 'boolean' ? data.isRenderable : true;
   });
 
+  readonly suggestions = computed<string[]>(() => {
+    const data = this.chartData();
+    if (!data) return [];
+    if (Array.isArray(data.suggestions)) return data.suggestions.filter(Boolean);
+    if (Array.isArray(data.suggestion)) return data.suggestion.filter(Boolean) as string[];
+    if (typeof data.suggestion === 'string' && data.suggestion.trim()) return [data.suggestion.trim()];
+    if (typeof (data as any).suggestions === 'string' && (data as any).suggestions.trim()) {
+      return [(data as any).suggestions.trim()];
+    }
+    return [];
+  });
+
   readonly chartOptions = computed<EChartsOption>(() =>
     enhanceEchartsOptions(this.analyticsResource.value()?.options),
   );

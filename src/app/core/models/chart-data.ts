@@ -6,6 +6,7 @@ export interface ChartReportResponse {
   chartType: 'bar' | 'line' | 'pie' | 'radar' | 'custom';
   isRenderable: boolean;
   description?: string;
-  suggestion?: string; 
+  suggestions?: string[];
+  suggestion?: string | string[];
   options: EChartsOption; 
 }

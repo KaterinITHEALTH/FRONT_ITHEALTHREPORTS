@@ -1,5 +1,4 @@
 <section class="dashboard">
-  
   <h2>Tabla de ventas</h2>
 
   <app-sales-table
@@ -53,19 +52,29 @@
       } @else {
         <div class="dashboard__suggestion-card">
           <div class="dashboard__suggestion-header">
-            <span class="dashboard__suggestion-icon">💡</span>
-            <div>
-              <h3 class="dashboard__suggestion-title">{{ chartData()?.title || 'Sugerencia de Consulta' }}</h3>
-              @if (chartData()?.description) {
-                <p class="dashboard__suggestion-description">{{ chartData()?.description }}</p>
-              }
-            </div>
+            <h3 class="dashboard__suggestion-title">
+              {{ chartData()?.title || 'No se pudo generar la gráfica' }}
+            </h3>
+            @if (chartData()?.description) {
+              <p class="dashboard__suggestion-description">{{ chartData()?.description }}</p>
+            }
           </div>
 
-          @if (chartData()?.suggestion) {
+          @if (suggestions().length > 0) {
             <div class="dashboard__suggestion-content">
-              <span class="dashboard__suggestion-label">Sugerencia:</span>
-              <p class="dashboard__suggestion-text">{{ chartData()?.suggestion }}</p>
+              <span class="dashboard__suggestion-label">Consultas alternativas</span>
+              <div class="dashboard__suggestion-chips">
+                @for (item of suggestions(); track item) {
+                  <button
+                    type="button"
+                    class="dashboard__suggestion-chip"
+                    (click)="onSubmit(item); promptInput.value = item"
+                    [disabled]="analyticsResource.isLoading()"
+                  >
+                    {{ item }}
+                  </button>
+                }
+              </div>
             </div>
           }
         </div>
