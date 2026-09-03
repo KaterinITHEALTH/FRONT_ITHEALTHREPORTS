@@ -1,6 +1,18 @@
 <section class="dashboard">
+  
+  <h2>Tabla de ventas</h2>
+
+  <app-sales-table
+    [sales]="saleResource.value() ?? []"
+    [isLoading]="saleResource.isLoading()"
+    [error]="saleResource.error()"
+  />
+
   <div class="dashboard__prompt-container">
-    <form class="dashboard__form" (submit)="$event.preventDefault(); onSubmit(promptInput.value); promptInput.value = ''">
+    <form
+      class="dashboard__form"
+      (submit)="$event.preventDefault(); onSubmit(promptInput.value); promptInput.value = ''"
+    >
       <input
         #promptInput
         type="text"
@@ -8,21 +20,25 @@
         placeholder="Ingresá lo que querés consultar..."
         class="dashboard__input"
         [disabled]="analyticsResource.isLoading()"
-      >
+      />
 
       <button
         type="submit"
         class="dashboard__button"
         [class.dashboard__button--loading]="analyticsResource.isLoading()"
-        [disabled]="analyticsResource.isLoading()">
+        [disabled]="analyticsResource.isLoading() || saleResource.isLoading()"
+      >
         {{ analyticsResource.isLoading() ? 'Generando...' : 'Generar Gráfica' }}
       </button>
     </form>
   </div>
 
   @if (analyticsResource.isLoading()) {
-    <div class="dashboard__status dashboard__status--loading">
-      <p class="dashboard__status-text">Consultando a n8n y generando reporte...</p>
+    <div class="dashboard__loading-state">
+      <div class="dashboard__loading-banner">
+        <span class="dashboard__loading-pulse"></span>
+        <p class="dashboard__loading-text">Consultando a n8n y procesando analíticas...</p>
+      </div>
     </div>
   } @else if (analyticsResource.error()) {
     <div class="dashboard__status dashboard__status--error">
@@ -31,11 +47,7 @@
   } @else if (analyticsResource.value()) {
     @if (isChartResponse()) {
       <div class="dashboard__chart-card">
-        <div
-          echarts
-          [options]="chartOptions()"
-          class="dashboard__chart-box">
-        </div>
+        <div echarts [options]="chartOptions()" class="dashboard__chart-box"></div>
       </div>
     } @else {
       <p class="dashboard__raw-response">{{ textAnswer() }}</p>

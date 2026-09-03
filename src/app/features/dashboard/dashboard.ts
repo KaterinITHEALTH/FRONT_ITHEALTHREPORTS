@@ -4,9 +4,10 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { rxResource } from '@angular/core/rxjs-interop';
 import { NgxEchartsDirective } from 'ngx-echarts';
 import type { EChartsOption } from 'echarts';
+import { SalesTable } from './components';
 
 @Component({
-  imports: [NgxEchartsDirective],
+  imports: [NgxEchartsDirective, SalesTable],
   selector: 'app-dashboard',
   styleUrl: './dashboard.scss',
   templateUrl: './dashboard.html',
@@ -19,6 +20,10 @@ export class Dashboard {
   readonly analyticsResource = rxResource({
     params: () => this.prompt(),
     stream: ({ params }) => this.n8nAnalyticsService.sendPrompt(params!),
+  });
+
+  readonly saleResource = rxResource({
+    stream: () => this.n8nAnalyticsService.getData(),
   });
 
   readonly isChartResponse = computed<boolean>(() => {

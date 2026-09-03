@@ -1,0 +1,86 @@
+<div class="sales-table-card">
+  <div class="sales-table-card__body">
+    @if (isLoading()) {
+      <div class="sales-table__skeleton-container">
+        <div class="sales-table__skeleton-row header"></div>
+        <div class="sales-table__skeleton-row"></div>
+        <div class="sales-table__skeleton-row"></div>
+        <div class="sales-table__skeleton-row"></div>
+        <div class="sales-table__skeleton-row"></div>
+      </div>
+    } @else if (error()) {
+      <div class="sales-table__state-msg sales-table__state-msg--error">
+        <p>No se pudieron cargar los datos de ventas. Verificá la conexión con n8n.</p>
+      </div>
+    } @else if (sales().length === 0) {
+      <div class="sales-table__state-msg sales-table__state-msg--empty">
+        <p>No hay registros de ventas disponibles.</p>
+      </div>
+    } @else {
+      <div class="sales-table__wrapper">
+        <table class="sales-table">
+          <thead>
+            <tr>
+              <th class="col-id">#</th>
+              <th>Fecha</th>
+              <th>Sede</th>
+              <th>Producto</th>
+              <th>Categoría</th>
+              <th>Canal</th>
+              <th>Tipo Cliente</th>
+              <th class="text-right">Unidades</th>
+              <th class="text-right">Costo Total</th>
+              <th class="text-right">Monto Ventas</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (item of paginatedSales(); track item.id) {
+              <tr>
+                <td class="col-id">{{ item.id }}</td>
+                <td>{{ item.fecha }}</td>
+                <td>{{ item.sede }}</td>
+                <td>{{ item.producto }}</td>
+                <td>{{ item.categoria }}</td>
+                <td>{{ item.canal_venta }}</td>
+                <td>{{ item.tipo_cliente }}</td>
+                <td class="text-right">{{ item.unidades_vendidas }}</td>
+                <td class="text-right">{{ item.costo_total }}</td>
+                <td class="text-right">{{ item.monto_ventas }}</td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+
+      @if (totalPages() > 1) {
+        <div class="sales-table__pagination">
+          <span class="sales-table__pagination-info">
+            Mostrando {{ (currentPage() - 1) * pageSize() + 1 }} -
+            {{ Math.min(currentPage() * pageSize(), sales().length) }} de
+            {{ sales().length }} registros
+          </span>
+
+          <div class="sales-table__pagination-controls">
+            <button
+              (click)="setPage(currentPage() - 1)"
+              [disabled]="currentPage() === 1"
+              class="pagination-btn"
+            >
+              ← Anterior
+            </button>
+
+            <span class="pagination-current">Página {{ currentPage() }} de {{ totalPages() }}</span>
+
+            <button
+              (click)="setPage(currentPage() + 1)"
+              [disabled]="currentPage() === totalPages()"
+              class="pagination-btn"
+            >
+              Siguiente →
+            </button>
+          </div>
+        </div>
+      }
+    }
+  </div>
+</div>
