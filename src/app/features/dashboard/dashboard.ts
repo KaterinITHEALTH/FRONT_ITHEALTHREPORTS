@@ -1,5 +1,6 @@
 import { enhanceEchartsOptions, N8nAnalyticsService } from '@/core';
 import { Component, computed, inject, signal } from '@angular/core';
+import { HttpErrorResponse } from '@angular/common/http';
 import { rxResource } from '@angular/core/rxjs-interop';
 import { NgxEchartsDirective } from 'ngx-echarts';
 import type { EChartsOption } from 'echarts';
@@ -32,6 +33,13 @@ export class Dashboard {
   readonly textAnswer = computed<string>(() => {
     const value = this.analyticsResource.value();
     return typeof value === 'string' ? value : JSON.stringify(value);
+  });
+
+  readonly errorMessage = computed<string>(() => {
+    const error = this.analyticsResource.error() as HttpErrorResponse | undefined;
+    if (!error) return '';
+    if (error.status === 0) return 'No se pudo conectar con n8n (revisá tu conexión o la configuración de CORS).';
+    return `n8n respondió con error ${error.status}: ${error.error?.message ?? error.message}`;
   });
 
   onSubmit(prompt: string) {
