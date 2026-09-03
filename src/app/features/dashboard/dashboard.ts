@@ -1,4 +1,4 @@
-import { N8nAnalyticsService } from '@/core';
+import { enhanceEchartsOptions, N8nAnalyticsService } from '@/core';
 import { Component, computed, inject, signal } from '@angular/core';
 import { rxResource } from '@angular/core/rxjs-interop';
 import { NgxEchartsDirective } from 'ngx-echarts';
@@ -25,12 +25,8 @@ export class Dashboard {
     return !!value && typeof value === 'object' && 'title' in value;
   });
 
-  readonly chartOptions = computed<EChartsOption>(
-    () => (this.analyticsResource.value()?.options ?? {})
-  );
-
-  readonly reportTitle = computed<string>(
-    () => (this.analyticsResource.value()?.title ?? '')
+  readonly chartOptions = computed<EChartsOption>(() =>
+    enhanceEchartsOptions(this.analyticsResource.value()?.options),
   );
 
   readonly textAnswer = computed<string>(() => {
