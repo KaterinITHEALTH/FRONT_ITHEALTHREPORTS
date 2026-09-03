@@ -46,9 +46,30 @@
     </div>
   } @else if (analyticsResource.value()) {
     @if (isChartResponse()) {
-      <div class="dashboard__chart-card">
-        <div echarts [options]="chartOptions()" class="dashboard__chart-box"></div>
-      </div>
+      @if (isRenderable()) {
+        <div class="dashboard__chart-card">
+          <div echarts [options]="chartOptions()" class="dashboard__chart-box"></div>
+        </div>
+      } @else {
+        <div class="dashboard__suggestion-card">
+          <div class="dashboard__suggestion-header">
+            <span class="dashboard__suggestion-icon">💡</span>
+            <div>
+              <h3 class="dashboard__suggestion-title">{{ chartData()?.title || 'Sugerencia de Consulta' }}</h3>
+              @if (chartData()?.description) {
+                <p class="dashboard__suggestion-description">{{ chartData()?.description }}</p>
+              }
+            </div>
+          </div>
+
+          @if (chartData()?.suggestion) {
+            <div class="dashboard__suggestion-content">
+              <span class="dashboard__suggestion-label">Sugerencia:</span>
+              <p class="dashboard__suggestion-text">{{ chartData()?.suggestion }}</p>
+            </div>
+          }
+        </div>
+      }
     } @else {
       <p class="dashboard__raw-response">{{ textAnswer() }}</p>
     }

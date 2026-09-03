@@ -22,6 +22,7 @@ export class N8nAnalyticsService {
       id: 'report-001',
       title: 'Disponibilidad de Servicios IT Health',
       chartType: 'bar',
+      isRenderable: true,
       description: 'Reporte semanal de incidentes por módulo',
       options: {
         title: {

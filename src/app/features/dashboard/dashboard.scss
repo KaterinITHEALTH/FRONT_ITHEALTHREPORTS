@@ -168,4 +168,72 @@
     white-space: pre-wrap;
     word-break: break-word;
   }
+
+  &__suggestion-card {
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
+    border: 1px solid #e2e8f0;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+
+  &__suggestion-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  &__suggestion-icon {
+    font-size: 1.4rem;
+    background: #eff6ff;
+    width: 42px;
+    height: 42px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    border: 1px solid #dbeafe;
+    flex-shrink: 0;
+  }
+
+  &__suggestion-title {
+    margin: 0;
+    font-size: 1.15rem;
+    font-weight: 600;
+    color: #0f172a;
+  }
+
+  &__suggestion-description {
+    margin: 0.35rem 0 0 0;
+    font-size: 0.9rem;
+    color: #64748b;
+    line-height: 1.5;
+  }
+
+  &__suggestion-content {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-left: 4px solid #3b82f6;
+    border-radius: 8px;
+    padding: 1rem 1.25rem;
+  }
+
+  &__suggestion-label {
+    display: block;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    color: #2563eb;
+    letter-spacing: 0.04em;
+  }
+
+  &__suggestion-text {
+    margin: 0.35rem 0 0 0;
+    font-size: 0.95rem;
+    color: #334155;
+    line-height: 1.55;
+  }
 }

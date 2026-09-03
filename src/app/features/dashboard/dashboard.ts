@@ -1,4 +1,4 @@
-import { enhanceEchartsOptions, N8nAnalyticsService } from '@/core';
+import { enhanceEchartsOptions, N8nAnalyticsService, ChartReportResponse } from '@/core';
 import { Component, computed, inject, signal } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
 import { rxResource } from '@angular/core/rxjs-interop';
@@ -29,6 +29,17 @@ export class Dashboard {
   readonly isChartResponse = computed<boolean>(() => {
     const value = this.analyticsResource.value();
     return !!value && typeof value === 'object' && 'title' in value;
+  });
+
+  readonly chartData = computed<ChartReportResponse | null>(() => {
+    const value = this.analyticsResource.value();
+    return this.isChartResponse() ? (value as ChartReportResponse) : null;
+  });
+
+  readonly isRenderable = computed<boolean>(() => {
+    const data = this.chartData();
+    if (!data) return false;
+    return typeof data.isRenderable === 'boolean' ? data.isRenderable : true;
   });
 
   readonly chartOptions = computed<EChartsOption>(() =>
